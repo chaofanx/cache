@@ -3,9 +3,11 @@ package com.chaofan.cache.core;
 import com.chaofan.cache.core.api.ICache;
 import com.chaofan.cache.core.api.ICacheEvict;
 import com.chaofan.cache.core.api.ICacheEvictContext;
+import com.chaofan.cache.core.api.ICacheExpire;
 import com.chaofan.cache.exception.CacheRuntimeException;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,6 +31,11 @@ public class Cache<K, V> implements ICache<K, V> {
      * 驱逐策略
      */
     private final ICacheEvict<K,V> evict;
+
+    /**
+     * 过期策略
+     */
+    private ICacheExpire<K,V> expire;
 
     public Cache(Map<K, V> map, int sizeLimit, ICacheEvict<K, V> evict) {
         this.map = map;
@@ -57,7 +64,9 @@ public class Cache<K, V> implements ICache<K, V> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public V get(Object key) {
+        this.expire.refreshExpire(Collections.singletonList((K)key));
         return map.get(key);
     }
 
@@ -110,5 +119,17 @@ public class Cache<K, V> implements ICache<K, V> {
     private boolean isExceeded() {
         final int currentSize = this.size();
         return currentSize >= this.sizeLimit;
+    }
+
+    @Override
+    public ICache<K, V> expire(K key, long timeInMills) {
+        long expireTime = System.currentTimeMillis() + timeInMills;
+        return this.expireAt(key, expireTime);
+    }
+
+    @Override
+    public ICache<K, V> expireAt(K key, long timeInMills) {
+        this.expire.expire(key, timeInMills);
+        return this;
     }
 }

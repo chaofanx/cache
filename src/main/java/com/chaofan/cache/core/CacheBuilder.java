@@ -2,7 +2,6 @@ package com.chaofan.cache.core;
 
 import com.chaofan.cache.core.api.ICache;
 import com.chaofan.cache.core.api.ICacheEvict;
-import com.chaofan.cache.core.api.ICacheEvictContext;
 import com.chaofan.cache.support.evict.FIFOEvict;
 
 import java.util.HashMap;
