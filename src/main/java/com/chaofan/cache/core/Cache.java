@@ -1,9 +1,6 @@
 package com.chaofan.cache.core;
 
-import com.chaofan.cache.core.api.ICache;
-import com.chaofan.cache.core.api.ICacheEvict;
-import com.chaofan.cache.core.api.ICacheEvictContext;
-import com.chaofan.cache.core.api.ICacheExpire;
+import com.chaofan.cache.core.api.*;
 import com.chaofan.cache.exception.CacheRuntimeException;
 
 import java.util.Collection;
@@ -20,28 +17,27 @@ public class Cache<K, V> implements ICache<K, V> {
     /**
      * 缓存容器
      */
-    private final Map<K,V> map;
+    private Map<K,V> map;
 
     /**
      * 缓存大小限制
      */
-    private final int sizeLimit;
+    private int sizeLimit;
 
     /**
      * 驱逐策略
      */
-    private final ICacheEvict<K,V> evict;
+    private ICacheEvict<K,V> evict;
 
     /**
      * 过期策略
      */
     private ICacheExpire<K,V> expire;
 
-    public Cache(Map<K, V> map, int sizeLimit, ICacheEvict<K, V> evict) {
-        this.map = map;
-        this.sizeLimit = sizeLimit;
-        this.evict = evict;
-    }
+    /**
+     * 加载数据
+     */
+    private ICacheLoad<K,V> load;
 
     @Override
     public int size() {
@@ -131,5 +127,30 @@ public class Cache<K, V> implements ICache<K, V> {
     public ICache<K, V> expireAt(K key, long timeInMills) {
         this.expire.expire(key, timeInMills);
         return this;
+    }
+
+    @Override
+    public void init() {
+        this.load.load(this);
+    }
+
+    public void setMap(Map<K, V> map) {
+        this.map = map;
+    }
+
+    public void setSizeLimit(int sizeLimit) {
+        this.sizeLimit = sizeLimit;
+    }
+
+    public void setEvict(ICacheEvict<K, V> evict) {
+        this.evict = evict;
+    }
+
+    public void setExpire(ICacheExpire<K, V> expire) {
+        this.expire = expire;
+    }
+
+    public void setLoad(ICacheLoad<K, V> load) {
+        this.load = load;
     }
 }

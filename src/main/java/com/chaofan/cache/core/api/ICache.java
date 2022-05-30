@@ -24,4 +24,9 @@ public interface ICache<K, V> extends Map<K, V> {
      * @return this
      */
     ICache<K, V> expireAt(final K key, final long timeInMills);
+
+    /**
+     * 初始化操作
+     */
+    void init();
 }
