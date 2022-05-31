@@ -2,14 +2,15 @@ package com.chaofan.cache.util;
 
 import com.chaofan.cache.exception.CacheRuntimeException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
+import java.util.List;
 
 /**
  * @author 李超凡
@@ -50,6 +51,14 @@ public final class FileUtil {
             channel.write(allocate);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static List<String> readAllLines(String path, Charset cs) {
+        try {
+            return Files.readAllLines(Path.of(path), cs);
+        } catch (IOException e) {
+            throw new CacheRuntimeException(e);
         }
     }
 }
