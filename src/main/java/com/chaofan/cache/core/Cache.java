@@ -2,6 +2,8 @@ package com.chaofan.cache.core;
 
 import com.chaofan.cache.core.api.*;
 import com.chaofan.cache.exception.CacheRuntimeException;
+import com.chaofan.cache.support.expire.SingleCacheExpire;
+import com.chaofan.cache.support.persist.InnerCachePersist;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -38,6 +40,11 @@ public class Cache<K, V> implements ICache<K, V> {
      * 加载数据
      */
     private ICacheLoad<K,V> load;
+
+    /**
+     * 持久化
+     */
+    private ICachePersist<K,V> persist;
 
     @Override
     public int size() {
@@ -137,6 +144,10 @@ public class Cache<K, V> implements ICache<K, V> {
     @Override
     public void init() {
         this.load.load(this);
+        this.expire = new SingleCacheExpire<>(this);
+        if (this.persist != null) {
+            new InnerCachePersist<>(this, persist);
+        }
     }
 
     public void setMap(Map<K, V> map) {
@@ -157,5 +168,9 @@ public class Cache<K, V> implements ICache<K, V> {
 
     public void setLoad(ICacheLoad<K, V> load) {
         this.load = load;
+    }
+
+    public void setPersist(ICachePersist<K, V> persist) {
+        this.persist = persist;
     }
 }
