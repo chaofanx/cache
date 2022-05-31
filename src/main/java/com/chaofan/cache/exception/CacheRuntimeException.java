@@ -16,6 +16,10 @@ public class CacheRuntimeException extends RuntimeException {
         super(message);
     }
 
+    public CacheRuntimeException(Throwable cause) {
+        super(cause);
+    }
+
     public CacheRuntimeException(String message, Throwable cause) {
         super(message, cause);
     }

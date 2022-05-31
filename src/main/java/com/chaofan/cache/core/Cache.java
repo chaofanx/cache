@@ -124,6 +124,11 @@ public class Cache<K, V> implements ICache<K, V> {
     }
 
     @Override
+    public ICacheExpire<K, V> expire() {
+        return this.expire;
+    }
+
+    @Override
     public ICache<K, V> expireAt(K key, long timeInMills) {
         this.expire.expire(key, timeInMills);
         return this;

@@ -2,7 +2,6 @@ package com.chaofan.cache.core;
 
 import com.chaofan.cache.core.api.ICache;
 import com.chaofan.cache.core.api.ICacheEvictContext;
-import lombok.Builder;
 
 /**
  * @author 李超凡
