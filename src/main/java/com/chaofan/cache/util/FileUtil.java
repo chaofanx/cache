@@ -24,9 +24,7 @@ public final class FileUtil {
         try {
             file.createNewFile();
         } catch (IOException e) {
-            throw new CacheRuntimeException("发生异常");
-        } catch (SecurityException e) {
-            throw new CacheRuntimeException("没有权限创建文件");
+            throw new CacheRuntimeException(e);
         }
     }
 

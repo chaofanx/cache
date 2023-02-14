@@ -1,11 +1,11 @@
 package com.chaofan.cache.support.load;
 
-import com.alibaba.fastjson.JSON;
+import cn.hutool.core.lang.TypeReference;
+import cn.hutool.json.JSONUtil;
 import com.chaofan.cache.core.api.ICache;
 import com.chaofan.cache.core.api.ICacheLoad;
 import com.chaofan.cache.support.model.RDBPersistEntry;
 import com.chaofan.cache.util.FileUtil;
-
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
@@ -28,7 +28,7 @@ public class JsonCacheLoad<K, V> implements ICacheLoad<K, V> {
         if (lines.isEmpty()) return;
         for (String line : lines) {
             if (line.isEmpty()) continue;
-            RDBPersistEntry<K, V> entry = JSON.parseObject(line, RDBPersistEntry.class);
+            RDBPersistEntry<K, V> entry = JSONUtil.toBean(line, new TypeReference<>() {}, true);
             cache.put(entry.getKey(), entry.getValue());
             if (Objects.nonNull(entry.getExpire())) {
                 cache.expireAt(entry.getKey(), entry.getExpire());

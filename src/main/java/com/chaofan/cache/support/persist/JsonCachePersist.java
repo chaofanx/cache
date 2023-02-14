@@ -1,11 +1,10 @@
 package com.chaofan.cache.support.persist;
 
-import com.alibaba.fastjson.JSON;
+import cn.hutool.json.JSONUtil;
 import com.chaofan.cache.core.api.ICache;
 import com.chaofan.cache.core.api.ICachePersist;
 import com.chaofan.cache.support.model.RDBPersistEntry;
 import com.chaofan.cache.util.FileUtil;
-
 import java.nio.file.StandardOpenOption;
 import java.util.Map;
 import java.util.Set;
@@ -38,8 +37,7 @@ public class JsonCachePersist<K, V> implements ICachePersist<K, V> {
             persistEntry.setKey(key);
             persistEntry.setValue(entry.getValue());
             persistEntry.setExpire(expireTime);
-
-            String line = JSON.toJSONString(persistEntry);
+            String line = JSONUtil.toJsonStr(persistEntry);
             FileUtil.write(path, line, StandardOpenOption.APPEND);
         }
     }
